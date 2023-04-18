@@ -4,12 +4,13 @@ const router = express.Router();
 
 const isNotAuthorized = (req, res, next) => {
   passport.authenticate('jwt', (err, user, info) => {
-    if (err || !user) {
-      // TODO: add redirect to error page
+    if (user) {
+      req.user = user;
+      next();
+    } else {
+      // this should go an error page
       res.redirect('/login');
     }
-    req.user = user;
-    next();
   })(req, res, next);
 };
 
